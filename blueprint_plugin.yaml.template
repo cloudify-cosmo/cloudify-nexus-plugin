@@ -1,0 +1,46 @@
+tosca_definitions_version: cloudify_dsl_1_0
+imports:
+  - http://www.getcloudify.org/spec/cloudify/3.1rc1/types.yaml
+
+plugins:
+  nexus:
+    executor: host_agent
+    source: cloudify-nexus-plugin
+
+node_types:
+  nexus_server:
+    derived_from: cloudify.nodes.Root
+    properties:
+      artifact: {}
+      nexus: {}
+      tempdir:
+        default: /tmp
+
+node_templates:
+  myhost:
+    type: cloudify.nodes.Compute
+    properties:
+      ip: 127.0.0.1
+      cloudify_agent:
+        user: vagrant
+        key: /home/vagrant/.ssh/id_rsa
+        wait_started_timeout: 60
+
+  jboss_installer:
+    type: jboss_server
+    properties:
+      nexus: http://11.0.0.8:8081/nexus
+      artifact:
+        artifactId: jboss-helloworld
+        repositoryId: test_repository_id
+        groupId: testGroupId
+        extension: war
+        version: 1.0
+
+    interfaces:
+      cloudify.interfaces.lifecycle:
+        create: nexus.nexus.tasks.download
+        destroy: nexus.nexus.tasks.delete
+    relationships:
+      - type: cloudify.relationships.contained_in
+        target: myhost
