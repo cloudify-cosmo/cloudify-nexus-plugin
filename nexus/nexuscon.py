@@ -24,8 +24,8 @@ class NexusConnector():
     MAVEN_CONTENT_PATH = u'/artifact/maven/content'
     REDIRECT_PATH = u'redirect'
 
-    def __init__(self):
-        self.nexus_base_path = ctx.node.properties['nexus']
+    def __init__(self, nexus_address):
+        self.nexus_base_path = nexus_address
 
     def download_file(self,
                       parameters,

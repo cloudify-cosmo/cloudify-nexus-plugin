@@ -18,21 +18,19 @@ from cloudify.decorators import operation
 from nexus import nexuscon
 
 @operation
-def deploy(*args, **kwargs):
+def download(artifact, address, tempdir, **kwargs):
     ctx.logger.info('Starting Nexus download')
-    file_name = get_filename()
-    parameters = get_artifact_parameters()
+    file_name = 'dummy.war'
+    parameters = get_artifact_parameters(artifact)
     ctx.logger.info('Download filename {0}'.format(file_name))
-    nexus = nexuscon.NexusConnector()
-    tempdir = ctx.node.properties['tempdir']
+    nexus = nexuscon.NexusConnector(address)
     if nexus.download_file(parameters, file_name, tempdir) != httplib.OK:
         ctx.logger.info("Download file has failed. Exiting.")
         return
 
 @operation
-def delete(*args, **kwargs):
-    file_name = get_filename()
-    tempdir = ctx.node.properties['tempdir']
+def delete(tempdir, **kwargs):
+    file_name = 'dummy.war'
     ctx.logger.info('Deleting filename {0}'.format(file_name))
     temp_path = tempdir + '\'' + file_name
     if os.path.exists(temp_path):
@@ -40,16 +38,15 @@ def delete(*args, **kwargs):
         ctx.logger.info('Filename removed: [{0}]'.format(file_name))
 
 
-def get_artifact_parameters():
+def get_artifact_parameters(artifact):
     parameters = dict()
-    parameters['a'] = ctx.node.properties['artifact']['artifactId']
-    parameters['r'] = ctx.node.properties['artifact']['repositoryId']
-    parameters['p'] = ctx.node.properties['artifact']['extension']
-    parameters['g'] = ctx.node.properties['artifact']['groupId']
-    parameters['v'] = ctx.node.properties['artifact']['version']
+    parameters['a'] = artifact.get('artifactId')
+    parameters['r'] = artifact.get('repositoryId')
+    parameters['p'] = artifact.get('extension')
+    parameters['g'] = artifact.get('groupId')
+    parameters['v'] = artifact.get('version')
     return parameters
 
 
-def get_filename():
-    return ctx.node.properties['artifact']['artifactId'] + \
-        '.' + ctx.node.properties['artifact']['extension']
+def get_filename(artifact):
+    return artifact.get('artifactId') + '.' + artifact.get('extension')
