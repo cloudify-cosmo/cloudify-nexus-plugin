@@ -44,10 +44,11 @@ class RestRequest:
     @staticmethod
     def process_request(request):
         opener = urllib2.build_opener(urllib2.HTTPHandler)
-        url = ''
-        code = httplib.OK
+        code = None
+        url = None
         try:
             url = opener.open(request)
+            code = url.getcode()
         except urllib2.HTTPError as e:
             code = e.code
             ctx.logger.error('Error code: {0} Reason: {1}'

@@ -51,8 +51,7 @@ class NexusConnector():
         out, code = RestRequest.process_request(request)
         if code == httplib.OK:
             with open(tempdir + '/' + output_file, 'w') as f:
-                shutil.copyfileobj(out,f)
-#                f.write(out)
+                shutil.copyfileobj(out, f)
         else:
             ctx.logger.error("Error while downloading artifact : {0}"
                              .format(code))
