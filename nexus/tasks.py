@@ -18,24 +18,22 @@ from cloudify.decorators import operation
 from nexus import nexuscon
 
 @operation
-def download(artifact, address, tempdir, **kwargs):
+def download(artifact, address, tempdir, resource_name, **kwargs):
     ctx.logger.info('Starting Nexus download')
-    file_name = 'dummy.war'
     parameters = get_artifact_parameters(artifact)
-    ctx.logger.info('Download filename {0}'.format(file_name))
+    ctx.logger.info('Download filename {0}'.format(resource_name))
     nexus = nexuscon.NexusConnector(address)
-    if nexus.download_file(parameters, file_name, tempdir) != httplib.OK:
+    if nexus.download_file(parameters, resource_name, tempdir) != httplib.OK:
         ctx.logger.info("Download file has failed. Exiting.")
         return
 
 @operation
-def delete(tempdir, **kwargs):
-    file_name = 'dummy.war'
-    ctx.logger.info('Deleting filename {0}'.format(file_name))
-    temp_path = tempdir + '\'' + file_name
+def delete(tempdir, resource_name, **kwargs):
+    ctx.logger.info('Deleting filename {0}'.format(resource_name))
+    temp_path = tempdir + '\'' + resource_name
     if os.path.exists(temp_path):
         shutil.remove(temp_path)
-        ctx.logger.info('Filename removed: [{0}]'.format(file_name))
+        ctx.logger.info('Filename removed: [{0}]'.format(resource_name))
 
 
 def get_artifact_parameters(artifact):

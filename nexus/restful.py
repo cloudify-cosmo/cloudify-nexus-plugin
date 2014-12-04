@@ -48,10 +48,10 @@ class RestRequest:
         code = httplib.OK
         try:
             url = opener.open(request)
-            output = url.read()
         except urllib2.HTTPError as e:
             code = e.code
             ctx.logger.error('Error code: {0} Reason: {1}'
                              .format(e.code, e.reason))
+            url = None
         finally:
-            return output, code
+            return url, code

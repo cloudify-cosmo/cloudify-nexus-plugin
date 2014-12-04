@@ -14,6 +14,7 @@
 
 import urllib
 import httplib
+import shutil
 from cloudify import ctx
 from nexus.restful import RestRequest
 
@@ -50,7 +51,8 @@ class NexusConnector():
         out, code = RestRequest.process_request(request)
         if code == httplib.OK:
             with open(tempdir + '/' + output_file, 'w') as f:
-                f.write(out)
+                shutil.copyfileobj(out,f)
+#                f.write(out)
         else:
             ctx.logger.error("Error while downloading artifact : {0}"
                              .format(code))

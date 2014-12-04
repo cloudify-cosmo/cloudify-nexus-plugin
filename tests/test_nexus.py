@@ -30,8 +30,7 @@ class TestNexus(unittest.TestCase):
     def setUp(self):
         ctx = MockCloudifyContext(
             node_id='id',
-            node_name='name',
-            properties={'nexus': "https://repository.jboss.org/nexus"})
+            node_name='name')
         current_ctx.set(ctx)
 
     def test_download_file_no_credentials(self):
@@ -42,7 +41,8 @@ class TestNexus(unittest.TestCase):
                       "p": "pom"}
         file_name = 'visualisation-datasource.pom'
         tempdir = '/tmp'
-        nexus = nexuscon.NexusConnector()
+        address = "https://repository.jboss.org/nexus"
+        nexus = nexuscon.NexusConnector(address)
         code = nexus.download_file(parameters,
                                    file_name,
                                    tempdir)
