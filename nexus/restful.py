@@ -44,7 +44,7 @@ class RestRequest:
     @staticmethod
     def process_request(request):
         opener = urllib2.build_opener(urllib2.HTTPHandler)
-        output = ''
+        url = ''
         code = httplib.OK
         try:
             url = opener.open(request)
@@ -52,6 +52,5 @@ class RestRequest:
             code = e.code
             ctx.logger.error('Error code: {0} Reason: {1}'
                              .format(e.code, e.reason))
-            url = None
         finally:
             return url, code
