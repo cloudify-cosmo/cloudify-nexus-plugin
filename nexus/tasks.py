@@ -12,10 +12,13 @@
 #   limitations under the License.
 ###############################################################################
 
+import os
+import shutil
 import httplib
 from cloudify import ctx
 from cloudify.decorators import operation
 from nexus import nexuscon
+
 
 @operation
 def download(artifact, address, tempdir, resource_name, **kwargs):
@@ -26,6 +29,7 @@ def download(artifact, address, tempdir, resource_name, **kwargs):
     if nexus.download_file(parameters, resource_name, tempdir) != httplib.OK:
         ctx.logger.info("Download file has failed. Exiting.")
         return
+
 
 @operation
 def delete(tempdir, resource_name, **kwargs):
