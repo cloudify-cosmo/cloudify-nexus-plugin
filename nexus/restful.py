@@ -13,7 +13,6 @@
 ###############################################################################
 
 import urllib2
-import httplib
 from cloudify import ctx
 import base64
 

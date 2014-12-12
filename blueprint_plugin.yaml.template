@@ -27,7 +27,7 @@ node_templates:
         wait_started_timeout: 60
 
   jboss_installer:
-    type: jboss_server
+    type: nexus_server
     properties:
       nexus: http://11.0.0.8:8081/nexus
       artifact:
