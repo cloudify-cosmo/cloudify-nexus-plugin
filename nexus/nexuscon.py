@@ -35,11 +35,16 @@ class NexusConnector():
                       user=None,
                       password=None):
         """
+
         Download war file from Nexus that is
         :param parameters: dictionary of artifact parameters:
         repoId, artifactId, version, groupId, type
         :param output_file: filename to save
         :return: None if everything ok, http error code otherwise
+        :param tempdir: temporary directory that downloaded files are kept
+        :param user: (optional) JBoss username
+        :param password: (optional) JBoss password
+        :return:
         """
         url = urllib.urlencode(parameters)
         url = self.nexus_base_path + \

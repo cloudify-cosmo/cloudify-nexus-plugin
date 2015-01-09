@@ -21,7 +21,20 @@ from nexus import nexuscon
 
 
 @operation
-def download(artifact, address, tempdir, resource_name, **kwargs):
+def download(artifact,
+             address,
+             tempdir,
+             resource_name,
+             **kwargs):
+    """
+    Download file
+    :param artifact: GAV dictionary
+    :param address: nexus address
+    :param tempdir: temporary directory to store files
+    :param resource_name: name of resource to get saved
+    :param kwargs:
+    :return:
+    """
     ctx.logger.info('Starting Nexus download')
     parameters = get_artifact_parameters(artifact)
     ctx.logger.info('Download filename {0}'.format(resource_name))
@@ -32,7 +45,16 @@ def download(artifact, address, tempdir, resource_name, **kwargs):
 
 
 @operation
-def delete(tempdir, resource_name, **kwargs):
+def delete(tempdir,
+           resource_name,
+           **kwargs):
+    """
+    Delete resource
+    :param tempdir: directory to resource name
+    :param resource_name: file to be removed
+    :param kwargs:
+    :return:
+    """
     ctx.logger.info('Deleting filename {0}'.format(resource_name))
     temp_path = tempdir + '\'' + resource_name
     if os.path.exists(temp_path):
@@ -41,6 +63,11 @@ def delete(tempdir, resource_name, **kwargs):
 
 
 def get_artifact_parameters(artifact):
+    """
+    Get GAV parameters
+    :param artifact: artifact dictionary
+    :return:
+    """
     parameters = dict()
     parameters['a'] = artifact.get('artifactId')
     parameters['r'] = artifact.get('repositoryId')
@@ -51,4 +78,9 @@ def get_artifact_parameters(artifact):
 
 
 def get_filename(artifact):
+    """
+    Get filename
+    :param artifact: artifact dictionary
+    :return:
+    """
     return artifact.get('artifactId') + '.' + artifact.get('extension')
